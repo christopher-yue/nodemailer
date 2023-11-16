@@ -11,12 +11,12 @@ const sender_email = credentials.sender_email;
 const sender_password = credentials.sender_password;
 
 if (process.argv.length > 2) {
-  var songsFound = [];
-  var artistsFound = [];
-  var artistsFoundIndex = new Array(process.argv.length);
-  var subject = "Your artists are: ";
-  var htmlMessage = "";
   request(url, function (error, response, html) {
+    var songsFound = [];
+    var artistsFound = [];
+    var artistsFoundIndex = new Array(process.argv.length);
+    var subject = "Your artists are: ";
+    var htmlMessage = "";
     if (!error && response.statusCode == 200) {
       var $ = cheerio.load(html);
       // search for element containing song title and artist name
@@ -57,32 +57,38 @@ if (process.argv.length > 2) {
       }
     }
 
-    // transporter object
-    let transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: sender_email,
-        pass: sender_password,
-      },
-    });
-
-    // mail options
-    let mailOptions = {
-      from: from,
-      to: to,
-      subject: subject,
-      html: htmlMessage,
-    };
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("email sent");
-      }
-    });
+    sendEmail(subject, htmlMessage);
   });
 } else {
   console.log("You did not speicfy any artists");
+}
+
+function sendEmail(subject, htmlMessage) {
+  // transporter object
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: sender_email,
+      pass: sender_password,
+    },
+  });
+
+  // mail options
+  let mailOptions = {
+    from: from,
+    to: to,
+    subject: subject,
+    html: htmlMessage,
+  };
+
+  // sends message
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("email sent");
+    }
+  });
 }
