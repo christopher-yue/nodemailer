@@ -53,6 +53,7 @@ if (process.argv.length > 2) {
         subject += ", ";
     }
 
+    // send email
     sendEmail(subject, htmlMessage);
   });
 } else console.log("You did not speicfy any artists");
