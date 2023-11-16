@@ -42,26 +42,20 @@ if (process.argv.length > 2) {
     }
 
     // convert artists found and songs found into string to be passed as html in email
-    for (let i = 0; i < artistsFound.length; i++) {
+    for (let i = 0; i < artistsFound.length; i++)
       htmlMessage +=
         "<p><b>" + artistsFound[i] + "</b>: <em>" + songsFound[i] + "</em></p>";
-    }
 
     // adds artists found from list of artists given to string to be passed as subject in email
     for (let i = 2; i < process.argv.length; i++) {
-      if (artistsFoundIndex[i] == 1) {
-        subject += process.argv[i];
-      }
-      if (i < process.argv.length - 1 && artistsFoundIndex[i + 1] == 1) {
+      if (artistsFoundIndex[i] == 1) subject += process.argv[i];
+      if (i < process.argv.length - 1 && artistsFoundIndex[i + 1] == 1)
         subject += ", ";
-      }
     }
 
     sendEmail(subject, htmlMessage);
   });
-} else {
-  console.log("You did not speicfy any artists");
-}
+} else console.log("You did not speicfy any artists");
 
 function sendEmail(subject, htmlMessage) {
   // transporter object
@@ -85,10 +79,7 @@ function sendEmail(subject, htmlMessage) {
 
   // sends message
   transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("email sent");
-    }
+    if (error) console.log(error);
+    else console.log("email sent");
   });
 }
